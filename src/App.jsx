@@ -155,15 +155,20 @@ function Shell() {
       {/* Page content */}
       <div style={{ flex: 1 }}>
         <Routes>
-          {/* Index redirect → /overview */}
-          <Route index element={<Navigate to="overview" replace />} />
+          {/*
+            FIX: Use absolute paths in Navigate (leading "/") to prevent
+            relative resolution from causing infinite redirect loops.
+            The catch-all was re-matching "/overview" and redirecting again
+            endlessly. Now it only fires for truly unknown paths.
+          */}
+          <Route index element={<Navigate to="/overview" replace />} />
 
-          <Route path="overview" element={<HowTheyFitPage />} />
-          <Route path="slang" element={<SLaNgPage />} />
-          <Route path="solver" element={<CalculusSolverPage />} />
+          <Route path="/overview" element={<HowTheyFitPage />} />
+          <Route path="/slang" element={<SLaNgPage />} />
+          <Route path="/solver" element={<CalculusSolverPage />} />
 
-          {/* Catch-all: any unknown sub-path falls back to overview */}
-          <Route path="*" element={<Navigate to="overview" replace />} />
+          {/* Catch-all: only hits for paths that don't match any route above */}
+          <Route path="*" element={<Navigate to="/overview" replace />} />
         </Routes>
       </div>
 

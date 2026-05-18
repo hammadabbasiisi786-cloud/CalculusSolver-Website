@@ -406,6 +406,18 @@ createFraction(
                 cursor: "pointer",
                 transition: "all 0.15s",
               }}
+              onMouseEnter={(e) => {
+                if (i !== active) {
+                  e.currentTarget.style.background = "#ffffff04";
+                  e.currentTarget.style.borderLeftColor = m.color + "30";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (i !== active) {
+                  e.currentTarget.style.background = "#0D1117";
+                  e.currentTarget.style.borderLeftColor = "transparent";
+                }
+              }}
             >
               <div
                 style={{
@@ -413,6 +425,7 @@ createFraction(
                   fontWeight: 600,
                   color: i === active ? m.color : "#94A3B8",
                   marginBottom: 3,
+                  transition: "color 0.15s",
                 }}
               >
                 {m.file}
@@ -576,7 +589,11 @@ createFraction(
                   color: "#94A3B8",
                 }}
               >
-                <span style={{ color: section.color, marginTop: 1 }}>▸</span>{" "}
+                <span
+                  style={{ color: section.color, marginTop: 1, flexShrink: 0 }}
+                >
+                  ▸
+                </span>{" "}
                 {item}
               </div>
             ))}

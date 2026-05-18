@@ -26,6 +26,7 @@ export function Tag({ children, color = "#6366F1" }) {
         border: `1px solid ${color}40`,
         letterSpacing: "0.06em",
         fontWeight: 600,
+        display: "inline-block",
       }}
     >
       {children}

@@ -20,14 +20,19 @@ const NAV = [
 function Shell() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  // Derive active tab from current pathname
   const active =
     NAV.find(
       (n) =>
         location.pathname === n.path ||
         location.pathname.startsWith(n.path + "/"),
     )?.id ?? "overview";
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname]);
 
   return (
     <div
@@ -48,19 +53,21 @@ function Shell() {
           padding: "0 32px",
           display: "flex",
           alignItems: "center",
+          justifyContent: "space-between",
           gap: 0,
           height: 56,
           position: "sticky",
           top: 0,
-          zIndex: 10,
+          zIndex: 100,
         }}
       >
+        {/* Brand */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
             gap: 10,
-            marginRight: 40,
+            flexShrink: 0,
           }}
         >
           <div
@@ -72,9 +79,10 @@ function Shell() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: 13,
+              fontSize: 14,
               color: "#fff",
               fontWeight: 700,
+              flexShrink: 0,
             }}
           >
             ∫
@@ -85,20 +93,32 @@ function Shell() {
               fontSize: 13,
               fontWeight: 700,
               letterSpacing: "0.05em",
+              whiteSpace: "nowrap",
             }}
           >
             QUANTUM LOGICS
           </span>
           <span style={{ color: "#334155", fontSize: 13 }}>/</span>
-          <span style={{ color: "#64748B", fontSize: 12 }}>
+          <span
+            style={{
+              color: "#64748B",
+              fontSize: 12,
+              whiteSpace: "nowrap",
+              display: "none", // hidden on very small screens — see media workaround below
+            }}
+            className="nav-subtitle"
+          >
             CalculusSolver + SLaNg
           </span>
         </div>
+
+        {/* Desktop nav links */}
         <div style={{ display: "flex", gap: 2 }}>
           {NAV.map((n) => (
             <button
               key={n.id}
               onClick={() => navigate(n.path)}
+              title={n.label}
               style={{
                 padding: "0 18px",
                 height: 56,
@@ -115,8 +135,15 @@ function Shell() {
                 display: "flex",
                 alignItems: "center",
                 gap: 6,
-                transition: "color 0.15s",
+                transition: "color 0.15s, border-color 0.15s",
                 fontFamily: "'IBM Plex Mono', monospace",
+                whiteSpace: "nowrap",
+              }}
+              onMouseEnter={(e) => {
+                if (active !== n.id) e.currentTarget.style.color = "#94A3B8";
+              }}
+              onMouseLeave={(e) => {
+                if (active !== n.id) e.currentTarget.style.color = "#475569";
               }}
             >
               <span style={{ fontSize: 14 }}>{n.icon}</span> {n.label}
@@ -139,6 +166,26 @@ function Shell() {
           <Route path="*" element={<Navigate to="overview" replace />} />
         </Routes>
       </div>
+
+      {/* Footer */}
+      <footer
+        style={{
+          borderTop: "1px solid #1E293B",
+          padding: "16px 32px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          fontSize: 11,
+          color: "#334155",
+          flexWrap: "wrap",
+          gap: 8,
+        }}
+      >
+        <span>© 2025 QuantumLogics Incorporated. All rights reserved.</span>
+        <span style={{ color: "#1E293B" }}>
+          CalculusSolver + SLaNg — Project Explorer
+        </span>
+      </footer>
     </div>
   );
 }
@@ -146,18 +193,18 @@ function Shell() {
 export default function App() {
   return (
     /*
-      basename="/developer/docs" means React Router treats
-      /developer/docs as the root. All <Link> and navigate() calls
-      are relative to it, so the actual URLs become:
-        /developer/docs/overview
-        /developer/docs/slang
-        /developer/docs/solver
+      FIX: Removed basename="/developer/docs" — this caused the Router to
+      render nothing because the app was served at "/" which didn't start
+      with the basename. If you deploy to a sub-path (e.g. /developer/docs),
+      add basename="/developer/docs" back AND configure your server/Vite to
+      serve the app at that path and redirect bare "/" to it.
 
-      A bare visit to / is caught by the Vite dev-server middleware
-      (vite.config.js) and redirected to /developer/docs, which then
-      hits the <Navigate to="overview"> index route above.
+      For Vite sub-path deploy, add to vite.config.js:
+        base: '/developer/docs'
+      And in this file:
+        <BrowserRouter basename="/developer/docs">
     */
-    <BrowserRouter basename="/developer/docs">
+    <BrowserRouter>
       <Shell />
     </BrowserRouter>
   );

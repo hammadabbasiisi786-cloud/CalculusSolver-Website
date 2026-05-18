@@ -114,7 +114,7 @@ export default function HowTheyFitPage() {
       <Grid cols={2} gap={16} style={{ marginBottom: 32 }}>
         <Card accent="#A855F730">
           <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-            <div style={{ fontSize: 28, lineHeight: 1 }}>∂</div>
+            <div style={{ fontSize: 28, lineHeight: 1, flexShrink: 0 }}>∂</div>
             <div>
               <div
                 style={{
@@ -165,27 +165,18 @@ export default function HowTheyFitPage() {
                   "slang-convertor.js",
                   "slang-symbolic.js",
                 ].map((m) => (
-                  <span
-                    key={m}
-                    style={{
-                      fontSize: 10,
-                      padding: "2px 8px",
-                      borderRadius: 4,
-                      background: "#A855F715",
-                      color: "#A855F7",
-                      border: "1px solid #A855F730",
-                    }}
-                  >
+                  <Tag key={m} color="#A855F7">
                     {m}
-                  </span>
+                  </Tag>
                 ))}
               </div>
             </div>
           </div>
         </Card>
+
         <Card accent="#6366F130">
           <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-            <div style={{ fontSize: 28, lineHeight: 1 }}>⬡</div>
+            <div style={{ fontSize: 28, lineHeight: 1, flexShrink: 0 }}>⬡</div>
             <div>
               <div
                 style={{
@@ -236,19 +227,9 @@ export default function HowTheyFitPage() {
                   "Tree Decoder",
                   "Step Tracer",
                 ].map((m) => (
-                  <span
-                    key={m}
-                    style={{
-                      fontSize: 10,
-                      padding: "2px 8px",
-                      borderRadius: 4,
-                      background: "#6366F115",
-                      color: "#6366F1",
-                      border: "1px solid #6366F130",
-                    }}
-                  >
+                  <Tag key={m} color="#6366F1">
                     {m}
-                  </span>
+                  </Tag>
                 ))}
               </div>
             </div>
@@ -333,6 +314,13 @@ export default function HowTheyFitPage() {
                 fontSize: 12,
                 whiteSpace: "nowrap",
                 transition: "all 0.15s",
+                fontFamily: "'IBM Plex Mono', monospace",
+              }}
+              onMouseEnter={(e) => {
+                if (i !== active) e.currentTarget.style.color = "#94A3B8";
+              }}
+              onMouseLeave={(e) => {
+                if (i !== active) e.currentTarget.style.color = "#475569";
               }}
             >
               <span style={{ marginRight: 6 }}>{s.icon}</span>

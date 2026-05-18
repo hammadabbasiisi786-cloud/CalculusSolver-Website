@@ -242,7 +242,7 @@ export default function CalculusSolverPage() {
 
       {/* Model architecture */}
       <SectionTitle sub="Click each component to explore.">
-        Model Architecture (4 Components)
+        Model Architecture (5 Components)
       </SectionTitle>
       <Grid cols={2} gap={16} style={{ marginBottom: 32 }}>
         {/* Left: selector */}
@@ -259,6 +259,19 @@ export default function CalculusSolverPage() {
                 background: i === activeLayer ? l.color + "0D" : "#0D1117",
                 borderRadius: 8,
                 cursor: "pointer",
+                transition: "all 0.15s",
+              }}
+              onMouseEnter={(e) => {
+                if (i !== activeLayer) {
+                  e.currentTarget.style.background = "#ffffff05";
+                  e.currentTarget.style.borderLeftColor = l.color + "40";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (i !== activeLayer) {
+                  e.currentTarget.style.background = "#0D1117";
+                  e.currentTarget.style.borderLeftColor = "transparent";
+                }
               }}
             >
               <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
@@ -360,7 +373,7 @@ export default function CalculusSolverPage() {
                   color: "#94A3B8",
                 }}
               >
-                <span style={{ color: layer.color }}>▸</span> {d}
+                <span style={{ color: layer.color, flexShrink: 0 }}>▸</span> {d}
               </div>
             ))}
           </div>
@@ -374,7 +387,17 @@ export default function CalculusSolverPage() {
       <SectionTitle sub="Three sequential stages — each checkpoint is the starting point for the next.">
         Training Pipeline
       </SectionTitle>
-      <div style={{ display: "flex", gap: 0, marginBottom: 16 }}>
+
+      {/*
+        FIX: The original code had a broken JSX structure in this map.
+        The <span> arrow was placed INSIDE the map's <div> wrapper but
+        OUTSIDE the <button>, but the closing </div> tag was mismatched —
+        it appeared to close the outer <div style={{display:"flex"...}}>
+        prematurely. Fixed by using a React fragment and proper nesting.
+      */}
+      <div
+        style={{ display: "flex", gap: 0, marginBottom: 16, overflowX: "auto" }}
+      >
         {TRAINING_STAGES.map((s, i) => (
           <div key={s.n} style={{ display: "flex", alignItems: "center" }}>
             <button
@@ -390,14 +413,31 @@ export default function CalculusSolverPage() {
                 color: i === activeStage ? s.color : "#475569",
                 cursor: "pointer",
                 fontSize: 12,
+                whiteSpace: "nowrap",
+                transition: "all 0.15s",
+                fontFamily: "'IBM Plex Mono', monospace",
+              }}
+              onMouseEnter={(e) => {
+                if (i !== activeStage) e.currentTarget.style.color = "#94A3B8";
+              }}
+              onMouseLeave={(e) => {
+                if (i !== activeStage) e.currentTarget.style.color = "#475569";
               }}
             >
               Stage {s.n}: {s.label}
             </button>
-            {i < 2 && <span style={{ color: "#1E293B", fontSize: 16 }}>→</span>}
+            {/* FIX: arrow only between items, not after the last one */}
+            {i < TRAINING_STAGES.length - 1 && (
+              <span
+                style={{ color: "#1E293B", fontSize: 16, padding: "0 2px" }}
+              >
+                →
+              </span>
+            )}
           </div>
         ))}
       </div>
+
       <Card accent={stage.color + "40"} style={{ marginBottom: 32 }}>
         <Grid cols={2} gap={20}>
           <div>
@@ -455,7 +495,12 @@ export default function CalculusSolverPage() {
               borderLeft: `3px solid ${d.color}`,
               borderRadius: 8,
               padding: "14px 18px",
+              transition: "background 0.15s",
             }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.background = "#ffffff04")
+            }
+            onMouseLeave={(e) => (e.currentTarget.style.background = "#0D1117")}
           >
             <div
               style={{
@@ -463,6 +508,7 @@ export default function CalculusSolverPage() {
                 fontSize: 14,
                 fontWeight: 700,
                 color: d.color,
+                flexShrink: 0,
               }}
             >
               {d.pairs}

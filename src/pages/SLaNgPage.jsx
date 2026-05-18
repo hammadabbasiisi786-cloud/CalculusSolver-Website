@@ -14,7 +14,7 @@ import {
 const MODULES = [
   {
     file: "slang-basic.js",
-    color: "#06B6D4",
+    color: "#22D3EE",
     title: "Basic Operations",
     desc: "Core expression building blocks. All other modules build on top of these.",
     functions: [
@@ -64,7 +64,7 @@ const val = evaluateFraction(deriv, { x: 5 });
   },
   {
     file: "slang-advanced.js",
-    color: "#A855F7",
+    color: "#C084FC",
     title: "Advanced Calculus",
     desc: "Higher-level operations built on top of slang-basic: Taylor series, limits, optimization, curve analysis.",
     functions: [
@@ -331,34 +331,90 @@ const L = arcLength(sinExpr, 'x', 0, Math.PI);
   },
 ];
 
+const CAPABILITIES = [
+  {
+    title: "Single-Variable",
+    color: "#22D3EE",
+    items: [
+      "Differentiation (power rule)",
+      "Indefinite integration",
+      "Definite integration",
+      "Product / Quotient rule",
+      "Chain rule (symbolic)",
+      "Simplification & expansion",
+      "Limit computation",
+      "Taylor series",
+    ],
+  },
+  {
+    title: "Multivariable",
+    color: "#C084FC",
+    items: [
+      "Partial derivatives",
+      "Gradient vector ∇f",
+      "Hessian matrix H",
+      "Tangent planes",
+      "Directional derivatives",
+      "Lagrange multipliers",
+      "Critical point classification",
+      "Double & Triple integrals",
+    ],
+  },
+  {
+    title: "Applied / Geometry",
+    color: "#10B981",
+    items: [
+      "Arc length (32-pt GL)",
+      "Surface area of revolution",
+      "Volume of revolution",
+      "Trig & transcendental fns",
+      "LaTeX ↔ SLaNg",
+      "Numerical verification",
+      "Multiple regression",
+      "Statistical distributions",
+    ],
+  },
+];
+
 export default function SLaNgPage() {
   const [active, setActive] = useState(0);
   const mod = MODULES[active];
 
   return (
     <PageWrap>
-      {/* Page header */}
-      <div style={{ marginBottom: 40 }}>
-        <EyebrowLabel color="#06B6D4">LIBRARY REFERENCE</EyebrowLabel>
+      {/* ── Page header ─────────────────────────────────────────────── */}
+      <div style={{ marginBottom: 48 }}>
+        <EyebrowLabel color="#22D3EE">LIBRARY REFERENCE</EyebrowLabel>
         <h1
           style={{
-            margin: "8px 0 10px",
-            fontSize: 28,
+            margin: "10px 0 12px",
+            fontSize: 32,
             fontWeight: 700,
-            color: "#F1F5F9",
+            color: "#EFF3FF",
             letterSpacing: "-0.03em",
-            lineHeight: 1.2,
+            lineHeight: 1.15,
+            fontFamily: "var(--font-sans)",
           }}
         >
-          SLaNg Math Library
+          SLaNg{" "}
+          <span
+            style={{
+              background: "linear-gradient(90deg, #22D3EE, #C084FC)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+            Math Library
+          </span>
         </h1>
         <p
           style={{
             margin: 0,
-            fontSize: 13.5,
-            color: "#64748B",
-            lineHeight: 1.7,
-            maxWidth: 600,
+            fontSize: 14,
+            color: "#3D4D6A",
+            lineHeight: 1.75,
+            maxWidth: 580,
+            fontFamily: "var(--font-sans)",
           }}
         >
           A JavaScript math library that represents calculus expressions as
@@ -367,72 +423,54 @@ export default function SLaNgPage() {
         </p>
       </div>
 
-      {/* Data structure explainer */}
-      <Card style={{ marginBottom: 28 }}>
-        <EyebrowLabel color="#06B6D4">
+      {/* ── Data structure explainer ────────────────────────────────── */}
+      <Card glow style={{ marginBottom: 32 }}>
+        <EyebrowLabel color="#22D3EE">
           The Data Structure — Everything is a Tree
         </EyebrowLabel>
-        <Grid cols={3} gap={14}>
-          <div>
-            <div
-              style={{
-                fontSize: 11,
-                color: "#334155",
-                marginBottom: 8,
-                letterSpacing: "0.06em",
-              }}
-            >
-              TERM — atomic unit
+        <Grid cols={3} gap={16} style={{ marginTop: 4 }}>
+          {[
+            {
+              label: "TERM — atomic unit",
+              code: `// 3x²y\ncreateTerm(3, { x: 2, y: 1 })\n// → { coeff: 3,\n//    var: { x: 2, y: 1 } }`,
+            },
+            {
+              label: "FRACTION — polynomial / number",
+              code: `// (x² + 5) / 2\ncreateFraction(\n  [createTerm(1,{x:2}), createTerm(5)],\n  2\n)\n// → { numi:{terms:[…]}, deno:2 }`,
+            },
+            {
+              label: "EQUATION — sum of products",
+              code: `// x² + 3x + 1\n// stored as 3 separate products:\n[ [frac_x2], [frac_3x], [frac_1] ]\n// added together at eval time`,
+            },
+          ].map(({ label, code }) => (
+            <div key={label}>
+              <div
+                style={{
+                  fontSize: 10,
+                  color: "#3D4D6A",
+                  marginBottom: 8,
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  fontFamily: "var(--font-mono)",
+                }}
+              >
+                {label}
+              </div>
+              <Code>{code}</Code>
             </div>
-            <Code>{`// 3x²y
-createTerm(3, { x: 2, y: 1 })
-// → { coeff: 3,
-//    var: { x: 2, y: 1 } }`}</Code>
-          </div>
-          <div>
-            <div
-              style={{
-                fontSize: 11,
-                color: "#334155",
-                marginBottom: 8,
-                letterSpacing: "0.06em",
-              }}
-            >
-              FRACTION — polynomial / number
-            </div>
-            <Code>{`// (x² + 5) / 2
-createFraction(
-  [createTerm(1,{x:2}), createTerm(5)],
-  2
-)
-// → { numi:{terms:[…]}, deno:2 }`}</Code>
-          </div>
-          <div>
-            <div
-              style={{
-                fontSize: 11,
-                color: "#334155",
-                marginBottom: 8,
-                letterSpacing: "0.06em",
-              }}
-            >
-              EQUATION — sum of products
-            </div>
-            <Code>{`// x² + 3x + 1
-// stored as 3 separate products:
-[ [frac_x2], [frac_3x], [frac_1] ]
-// added together at eval time`}</Code>
-          </div>
+          ))}
         </Grid>
       </Card>
 
       <Divider />
-      <SectionTitle sub="Click a module to explore its functions and code.">
+
+      {/* ── Module Reference ────────────────────────────────────────── */}
+      <SectionTitle sub="Click a module to explore its functions and usage.">
         Module Reference
       </SectionTitle>
 
       <Grid cols={2} gap={16}>
-        {/* Module list */}
+        {/* Module list sidebar */}
         <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
           {MODULES.map((m, i) => (
             <button
@@ -441,7 +479,7 @@ createFraction(
               style={{
                 textAlign: "left",
                 padding: "12px 16px",
-                border: `1px solid ${i === active ? m.color + "45" : "#1E293B"}`,
+                border: `1px solid ${i === active ? m.color + "40" : "#1C2438"}`,
                 borderLeft: `3px solid ${i === active ? m.color : "transparent"}`,
                 background: i === active ? m.color + "0C" : "transparent",
                 borderRadius: 8,
@@ -450,7 +488,7 @@ createFraction(
               }}
               onMouseEnter={(e) => {
                 if (i !== active) {
-                  e.currentTarget.style.background = "#ffffff06";
+                  e.currentTarget.style.background = "#ffffff05";
                   e.currentTarget.style.borderLeftColor = m.color + "30";
                 }
               }}
@@ -465,26 +503,35 @@ createFraction(
                 style={{
                   fontSize: 12,
                   fontWeight: 600,
-                  color: i === active ? m.color : "#94A3B8",
+                  color: i === active ? m.color : "#8B97B8",
                   marginBottom: 3,
+                  fontFamily: "var(--font-mono)",
                   transition: "color 0.15s",
                 }}
               >
                 {m.file}
               </div>
-              <div style={{ fontSize: 11, color: "#334155" }}>{m.title}</div>
+              <div
+                style={{
+                  fontSize: 11,
+                  color: "#3D4D6A",
+                  fontFamily: "var(--font-sans)",
+                }}
+              >
+                {m.title}
+              </div>
             </button>
           ))}
         </div>
 
-        {/* Module detail */}
-        <Card accent={mod.color + "35"}>
-          <div style={{ marginBottom: 16 }}>
+        {/* Module detail panel */}
+        <Card accent={mod.color + "30"} glow>
+          <div style={{ marginBottom: 18 }}>
             <EyebrowLabel color={mod.color}>{mod.file}</EyebrowLabel>
             <div
               style={{
-                fontSize: 15,
-                color: "#F1F5F9",
+                fontSize: 16,
+                color: "#EFF3FF",
                 fontWeight: 700,
                 marginBottom: 8,
               }}
@@ -494,33 +541,41 @@ createFraction(
             <p
               style={{
                 margin: 0,
-                fontSize: 12.5,
-                color: "#94A3B8",
-                lineHeight: 1.7,
+                fontSize: 13,
+                color: "#8B97B8",
+                lineHeight: 1.75,
               }}
             >
               {mod.desc}
             </p>
           </div>
 
-          <div style={{ marginBottom: 16 }}>
-            <EyebrowLabel color="#334155">Exported Functions</EyebrowLabel>
+          <div style={{ marginBottom: 18 }}>
+            <EyebrowLabel color="#3D4D6A">Exported Functions</EyebrowLabel>
             {mod.functions.map((f, i) => (
               <div
                 key={i}
                 style={{
-                  padding: "8px 0",
+                  padding: "9px 0",
                   borderBottom:
-                    i < mod.functions.length - 1 ? "1px solid #0D1624" : "none",
+                    i < mod.functions.length - 1 ? "1px solid #0F1728" : "none",
                 }}
               >
-                <code style={{ fontSize: 11, color: mod.color }}>{f.name}</code>
-                <div
+                <code
                   style={{
                     fontSize: 11,
-                    color: "#475569",
+                    color: mod.color,
+                    fontFamily: "var(--font-mono)",
+                  }}
+                >
+                  {f.name}
+                </code>
+                <div
+                  style={{
+                    fontSize: 11.5,
+                    color: "#3D4D6A",
                     marginTop: 3,
-                    lineHeight: 1.5,
+                    lineHeight: 1.55,
                   }}
                 >
                   {f.desc}
@@ -530,7 +585,7 @@ createFraction(
           </div>
 
           <div>
-            <EyebrowLabel color="#334155">Usage Example</EyebrowLabel>
+            <EyebrowLabel color="#3D4D6A">Usage Example</EyebrowLabel>
             <Code>{mod.code}</Code>
           </div>
         </Card>
@@ -538,56 +593,14 @@ createFraction(
 
       <Divider />
 
-      {/* Capabilities map */}
+      {/* ── Capability Map ───────────────────────────────────────────── */}
       <SectionTitle sub="What SLaNg can compute out of the box.">
         Full Capability Map
       </SectionTitle>
+
       <Grid cols={3} gap={12}>
-        {[
-          {
-            title: "Single-Variable",
-            color: "#06B6D4",
-            items: [
-              "Differentiation (power rule)",
-              "Indefinite integration",
-              "Definite integration",
-              "Product / Quotient rule",
-              "Chain rule (symbolic)",
-              "Simplification & expansion",
-              "Limit computation",
-              "Taylor series",
-            ],
-          },
-          {
-            title: "Multivariable",
-            color: "#A855F7",
-            items: [
-              "Partial derivatives",
-              "Gradient vector ∇f",
-              "Hessian matrix H",
-              "Tangent planes",
-              "Directional derivatives",
-              "Lagrange multipliers",
-              "Critical point classification",
-              "Double & Triple integrals",
-            ],
-          },
-          {
-            title: "Applied / Geometry",
-            color: "#10B981",
-            items: [
-              "Arc length (32-pt GL)",
-              "Surface area of revolution",
-              "Volume of revolution",
-              "Trig & transcendental fns",
-              "LaTeX ↔ SLaNg",
-              "Numerical verification",
-              "Multiple regression",
-              "Statistical distributions",
-            ],
-          },
-        ].map((section) => (
-          <Card key={section.title} accent={section.color + "28"}>
+        {CAPABILITIES.map((section) => (
+          <Card key={section.title} accent={section.color + "28"} glow>
             <EyebrowLabel color={section.color}>{section.title}</EyebrowLabel>
             {section.items.map((item) => (
               <ListItem key={item} color={section.color}>

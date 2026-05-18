@@ -11,10 +11,34 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap"
       rel="stylesheet"
     />
     <style>
+      :root {
+        --bg-base: #06080f;
+        --bg-surface: #0b0e1a;
+        --bg-raised: #0f1422;
+        --bg-hover: #141929;
+        --border: #1c2438;
+        --border-light: #222d42;
+        --text-primary: #eff3ff;
+        --text-secondary: #8b97b8;
+        --text-muted: #3d4d6a;
+        --accent-violet: #7c6fff;
+        --accent-cyan: #22d3ee;
+        --accent-amber: #f59e0b;
+        --accent-red: #ef4444;
+        --accent-green: #10b981;
+        --accent-purple: #c084fc;
+        --font-sans: "Space Grotesk", system-ui, sans-serif;
+        --font-mono: "JetBrains Mono", "Courier New", monospace;
+        --radius-sm: 6px;
+        --radius-md: 10px;
+        --radius-lg: 16px;
+        --nav-h: 60px;
+      }
+
       *,
       *::before,
       *::after {
@@ -28,57 +52,58 @@
       }
 
       body {
-        background: #080b14;
-        /* Prevent layout shift from scrollbar appearing */
+        background: var(--bg-base);
+        font-family: var(--font-sans);
         overflow-y: scroll;
+        /* Subtle grid texture */
+        background-image:
+          linear-gradient(rgba(124, 111, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(124, 111, 255, 0.03) 1px, transparent 1px);
+        background-size: 48px 48px;
       }
 
-      /* Custom scrollbar */
+      /* Scrollbar */
       ::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
+        width: 5px;
+        height: 5px;
       }
       ::-webkit-scrollbar-track {
-        background: #080b14;
+        background: var(--bg-base);
       }
       ::-webkit-scrollbar-thumb {
-        background: #1e293b;
+        background: var(--border);
         border-radius: 3px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #334155;
+        background: var(--border-light);
       }
 
-      /* Selection color */
+      /* Selection */
       ::selection {
-        background: #6366f130;
-        color: #f1f5f9;
+        background: rgba(124, 111, 255, 0.28);
+        color: var(--text-primary);
       }
 
-      /* Focus ring for keyboard nav */
+      /* Focus ring */
       :focus-visible {
-        outline: 2px solid #6366f1;
-        outline-offset: 2px;
-        border-radius: 4px;
+        outline: 2px solid var(--accent-violet);
+        outline-offset: 3px;
+        border-radius: var(--radius-sm);
       }
 
-      /* Responsive: hide desktop nav on small screens, show hamburger */
-      @media (max-width: 680px) {
-        /* Hide desktop nav */
+      /* Responsive nav */
+      @media (max-width: 700px) {
         nav > div:last-of-type:not(.mobile-menu-btn) {
           display: none !important;
         }
-        /* Show hamburger */
         .mobile-menu-btn {
           display: flex !important;
         }
-        /* Hide subtitle in brand */
         .nav-subtitle {
           display: none !important;
         }
       }
 
-      /* Responsive: single-column grids on small screens */
       @media (max-width: 640px) {
         div[style*="grid-template-columns: repeat(2"] {
           grid-template-columns: 1fr !important;
@@ -86,8 +111,33 @@
         div[style*="grid-template-columns: repeat(3"] {
           grid-template-columns: 1fr !important;
         }
-        div[style*="padding: 44px 32px"] {
-          padding: 28px 18px 48px !important;
+        div[style*="padding: 48px 36px"] {
+          padding: 28px 18px 52px !important;
+        }
+      }
+
+      /* Fade-in animation for page content */
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .page-content {
+        animation: fadeUp 0.35s ease both;
+      }
+
+      /* Animated underline for active nav item */
+      @keyframes slideIn {
+        from {
+          transform: scaleX(0);
+        }
+        to {
+          transform: scaleX(1);
         }
       }
     </style>

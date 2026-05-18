@@ -7,6 +7,8 @@ import {
   Divider,
   SectionTitle,
   Tag,
+  EyebrowLabel,
+  ListItem,
 } from "../components/ui.jsx";
 
 const MODULES = [
@@ -335,25 +337,51 @@ export default function SLaNgPage() {
 
   return (
     <PageWrap>
-      <SectionTitle sub="A JavaScript math library that represents calculus expressions as structured trees and computes exact symbolic results. CalculusSolver is built entirely on top of SLaNg.">
-        SLaNg Math Library
-      </SectionTitle>
-
-      {/* Data structure explainer */}
-      <Card style={{ marginBottom: 24 }}>
-        <div
+      {/* Page header */}
+      <div style={{ marginBottom: 40 }}>
+        <EyebrowLabel color="#06B6D4">LIBRARY REFERENCE</EyebrowLabel>
+        <h1
           style={{
-            fontSize: 11,
-            color: "#06B6D4",
-            letterSpacing: "0.1em",
-            marginBottom: 12,
+            margin: "8px 0 10px",
+            fontSize: 28,
+            fontWeight: 700,
+            color: "#F1F5F9",
+            letterSpacing: "-0.03em",
+            lineHeight: 1.2,
           }}
         >
-          THE DATA STRUCTURE — EVERYTHING IS A TREE
-        </div>
-        <Grid cols={3} gap={12}>
+          SLaNg Math Library
+        </h1>
+        <p
+          style={{
+            margin: 0,
+            fontSize: 13.5,
+            color: "#64748B",
+            lineHeight: 1.7,
+            maxWidth: 600,
+          }}
+        >
+          A JavaScript math library that represents calculus expressions as
+          structured trees and computes exact symbolic results. CalculusSolver
+          is built entirely on top of SLaNg.
+        </p>
+      </div>
+
+      {/* Data structure explainer */}
+      <Card style={{ marginBottom: 28 }}>
+        <EyebrowLabel color="#06B6D4">
+          The Data Structure — Everything is a Tree
+        </EyebrowLabel>
+        <Grid cols={3} gap={14}>
           <div>
-            <div style={{ fontSize: 11, color: "#64748B", marginBottom: 6 }}>
+            <div
+              style={{
+                fontSize: 11,
+                color: "#334155",
+                marginBottom: 8,
+                letterSpacing: "0.06em",
+              }}
+            >
               TERM — atomic unit
             </div>
             <Code>{`// 3x²y
@@ -362,7 +390,14 @@ createTerm(3, { x: 2, y: 1 })
 //    var: { x: 2, y: 1 } }`}</Code>
           </div>
           <div>
-            <div style={{ fontSize: 11, color: "#64748B", marginBottom: 6 }}>
+            <div
+              style={{
+                fontSize: 11,
+                color: "#334155",
+                marginBottom: 8,
+                letterSpacing: "0.06em",
+              }}
+            >
               FRACTION — polynomial / number
             </div>
             <Code>{`// (x² + 5) / 2
@@ -373,7 +408,14 @@ createFraction(
 // → { numi:{terms:[…]}, deno:2 }`}</Code>
           </div>
           <div>
-            <div style={{ fontSize: 11, color: "#64748B", marginBottom: 6 }}>
+            <div
+              style={{
+                fontSize: 11,
+                color: "#334155",
+                marginBottom: 8,
+                letterSpacing: "0.06em",
+              }}
+            >
               EQUATION — sum of products
             </div>
             <Code>{`// x² + 3x + 1
@@ -399,22 +441,22 @@ createFraction(
               style={{
                 textAlign: "left",
                 padding: "12px 16px",
-                border: `1px solid ${i === active ? m.color + "50" : "#1E293B"}`,
+                border: `1px solid ${i === active ? m.color + "45" : "#1E293B"}`,
                 borderLeft: `3px solid ${i === active ? m.color : "transparent"}`,
-                background: i === active ? m.color + "0D" : "#0D1117",
+                background: i === active ? m.color + "0C" : "transparent",
                 borderRadius: 8,
                 cursor: "pointer",
                 transition: "all 0.15s",
               }}
               onMouseEnter={(e) => {
                 if (i !== active) {
-                  e.currentTarget.style.background = "#ffffff04";
+                  e.currentTarget.style.background = "#ffffff06";
                   e.currentTarget.style.borderLeftColor = m.color + "30";
                 }
               }}
               onMouseLeave={(e) => {
                 if (i !== active) {
-                  e.currentTarget.style.background = "#0D1117";
+                  e.currentTarget.style.background = "transparent";
                   e.currentTarget.style.borderLeftColor = "transparent";
                 }
               }}
@@ -430,30 +472,21 @@ createFraction(
               >
                 {m.file}
               </div>
-              <div style={{ fontSize: 11, color: "#475569" }}>{m.title}</div>
+              <div style={{ fontSize: 11, color: "#334155" }}>{m.title}</div>
             </button>
           ))}
         </div>
 
         {/* Module detail */}
-        <Card accent={mod.color + "40"}>
-          <div style={{ marginBottom: 14 }}>
-            <div
-              style={{
-                fontSize: 11,
-                color: mod.color,
-                letterSpacing: "0.1em",
-                marginBottom: 4,
-              }}
-            >
-              {mod.file}
-            </div>
+        <Card accent={mod.color + "35"}>
+          <div style={{ marginBottom: 16 }}>
+            <EyebrowLabel color={mod.color}>{mod.file}</EyebrowLabel>
             <div
               style={{
                 fontSize: 15,
                 color: "#F1F5F9",
                 fontWeight: 700,
-                marginBottom: 6,
+                marginBottom: 8,
               }}
             >
               {mod.title}
@@ -463,35 +496,33 @@ createFraction(
                 margin: 0,
                 fontSize: 12.5,
                 color: "#94A3B8",
-                lineHeight: 1.6,
+                lineHeight: 1.7,
               }}
             >
               {mod.desc}
             </p>
           </div>
 
-          <div style={{ marginBottom: 14 }}>
-            <div
-              style={{
-                fontSize: 10,
-                color: "#475569",
-                letterSpacing: "0.1em",
-                marginBottom: 8,
-              }}
-            >
-              EXPORTED FUNCTIONS
-            </div>
+          <div style={{ marginBottom: 16 }}>
+            <EyebrowLabel color="#334155">Exported Functions</EyebrowLabel>
             {mod.functions.map((f, i) => (
               <div
                 key={i}
                 style={{
-                  padding: "7px 0",
+                  padding: "8px 0",
                   borderBottom:
-                    i < mod.functions.length - 1 ? "1px solid #0F172A" : "none",
+                    i < mod.functions.length - 1 ? "1px solid #0D1624" : "none",
                 }}
               >
                 <code style={{ fontSize: 11, color: mod.color }}>{f.name}</code>
-                <div style={{ fontSize: 11, color: "#64748B", marginTop: 2 }}>
+                <div
+                  style={{
+                    fontSize: 11,
+                    color: "#475569",
+                    marginTop: 3,
+                    lineHeight: 1.5,
+                  }}
+                >
                   {f.desc}
                 </div>
               </div>
@@ -499,16 +530,7 @@ createFraction(
           </div>
 
           <div>
-            <div
-              style={{
-                fontSize: 10,
-                color: "#475569",
-                letterSpacing: "0.1em",
-                marginBottom: 8,
-              }}
-            >
-              USAGE EXAMPLE
-            </div>
+            <EyebrowLabel color="#334155">Usage Example</EyebrowLabel>
             <Code>{mod.code}</Code>
           </div>
         </Card>
@@ -516,7 +538,7 @@ createFraction(
 
       <Divider />
 
-      {/* Capabilities summary */}
+      {/* Capabilities map */}
       <SectionTitle sub="What SLaNg can compute out of the box.">
         Full Capability Map
       </SectionTitle>
@@ -565,37 +587,12 @@ createFraction(
             ],
           },
         ].map((section) => (
-          <Card key={section.title} accent={section.color + "30"}>
-            <div
-              style={{
-                fontSize: 11,
-                color: section.color,
-                letterSpacing: "0.1em",
-                marginBottom: 10,
-              }}
-            >
-              {section.title}
-            </div>
+          <Card key={section.title} accent={section.color + "28"}>
+            <EyebrowLabel color={section.color}>{section.title}</EyebrowLabel>
             {section.items.map((item) => (
-              <div
-                key={item}
-                style={{
-                  display: "flex",
-                  gap: 8,
-                  alignItems: "flex-start",
-                  padding: "5px 0",
-                  borderBottom: "1px solid #0F172A",
-                  fontSize: 12,
-                  color: "#94A3B8",
-                }}
-              >
-                <span
-                  style={{ color: section.color, marginTop: 1, flexShrink: 0 }}
-                >
-                  ▸
-                </span>{" "}
+              <ListItem key={item} color={section.color}>
                 {item}
-              </div>
+              </ListItem>
             ))}
           </Card>
         ))}

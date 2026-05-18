@@ -22,22 +22,24 @@
         margin: 0;
         padding: 0;
       }
+
       html {
-        /* Smooth scroll for any anchor nav */
         scroll-behavior: smooth;
       }
+
       body {
         background: #080b14;
         /* Prevent layout shift from scrollbar appearing */
         overflow-y: scroll;
       }
+
       /* Custom scrollbar */
       ::-webkit-scrollbar {
         width: 6px;
         height: 6px;
       }
       ::-webkit-scrollbar-track {
-        background: #0d1117;
+        background: #080b14;
       }
       ::-webkit-scrollbar-thumb {
         background: #1e293b;
@@ -46,16 +48,47 @@
       ::-webkit-scrollbar-thumb:hover {
         background: #334155;
       }
+
       /* Selection color */
       ::selection {
-        background: #6366f140;
+        background: #6366f130;
         color: #f1f5f9;
       }
+
       /* Focus ring for keyboard nav */
       :focus-visible {
         outline: 2px solid #6366f1;
         outline-offset: 2px;
         border-radius: 4px;
+      }
+
+      /* Responsive: hide desktop nav on small screens, show hamburger */
+      @media (max-width: 680px) {
+        /* Hide desktop nav */
+        nav > div:last-of-type:not(.mobile-menu-btn) {
+          display: none !important;
+        }
+        /* Show hamburger */
+        .mobile-menu-btn {
+          display: flex !important;
+        }
+        /* Hide subtitle in brand */
+        .nav-subtitle {
+          display: none !important;
+        }
+      }
+
+      /* Responsive: single-column grids on small screens */
+      @media (max-width: 640px) {
+        div[style*="grid-template-columns: repeat(2"] {
+          grid-template-columns: 1fr !important;
+        }
+        div[style*="grid-template-columns: repeat(3"] {
+          grid-template-columns: 1fr !important;
+        }
+        div[style*="padding: 44px 32px"] {
+          padding: 28px 18px 48px !important;
+        }
       }
     </style>
   </head>

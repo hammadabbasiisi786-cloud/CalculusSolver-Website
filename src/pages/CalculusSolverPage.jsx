@@ -6,6 +6,9 @@ import {
   PageWrap,
   Divider,
   SectionTitle,
+  Tag,
+  EyebrowLabel,
+  ListItem,
 } from "../components/ui.jsx";
 
 const LAYERS = [
@@ -88,7 +91,7 @@ class RuleHead(nn.Module):
     label: "Tree Decoder",
     color: "#EF4444",
     sub: "model/tree_decoder.py · inference/beam_search.py",
-    desc: "An 8-layer autoregressive Transformer decoder that generates the output SLaNg token sequence one token at a time. At each step it attends to (1) its own previous tokens, (2) the full encoder output via cross-attention, (3) Rule Head predictions injected as prefix embeddings. The SLaNg validity mask sets logits to -inf for any token that would violate SLaNg grammar — making syntactically invalid expressions impossible at the token level, not just filtered later.",
+    desc: "An 8-layer autoregressive Transformer decoder that generates the output SLaNg token sequence one token at a time. At each step it attends to (1) its own previous tokens, (2) the full encoder output via cross-attention, (3) Rule Head predictions injected as prefix embeddings. The SLaNg validity mask sets logits to -inf for any token that would violate SLaNg grammar — making syntactically invalid expressions impossible at the token level.",
     detail: [
       "8-layer decoder, same dims as encoder",
       "Causal self-attention + cross-attention to encoder",
@@ -236,57 +239,87 @@ export default function CalculusSolverPage() {
 
   return (
     <PageWrap>
-      <SectionTitle sub="A Python + JavaScript ML system that learns to solve calculus by predicting which SLaNg operations to apply, verified by slangmath.">
-        CalculusSolver — ML System
-      </SectionTitle>
+      {/* Page header */}
+      <div style={{ marginBottom: 40 }}>
+        <EyebrowLabel color="#6366F1">ML SYSTEM DEEP DIVE</EyebrowLabel>
+        <h1
+          style={{
+            margin: "8px 0 10px",
+            fontSize: 28,
+            fontWeight: 700,
+            color: "#F1F5F9",
+            letterSpacing: "-0.03em",
+            lineHeight: 1.2,
+          }}
+        >
+          CalculusSolver
+        </h1>
+        <p
+          style={{
+            margin: 0,
+            fontSize: 13.5,
+            color: "#64748B",
+            lineHeight: 1.7,
+            maxWidth: 620,
+          }}
+        >
+          A Python + JavaScript ML system that learns to solve calculus by
+          predicting which SLaNg operations to apply — verified by slangmath at
+          every step.
+        </p>
+      </div>
 
       {/* Model architecture */}
-      <SectionTitle sub="Click each component to explore.">
-        Model Architecture (5 Components)
+      <SectionTitle sub="Click each component to explore its architecture and code.">
+        Model Architecture — 5 Components
       </SectionTitle>
       <Grid cols={2} gap={16} style={{ marginBottom: 32 }}>
         {/* Left: selector */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
           {LAYERS.map((l, i) => (
             <button
               key={l.id}
               onClick={() => setActiveLayer(i)}
               style={{
                 textAlign: "left",
-                padding: "12px 16px",
-                border: `1px solid ${i === activeLayer ? l.color + "50" : "#1E293B"}`,
+                padding: "13px 16px",
+                border: `1px solid ${i === activeLayer ? l.color + "45" : "#1E293B"}`,
                 borderLeft: `3px solid ${i === activeLayer ? l.color : "transparent"}`,
-                background: i === activeLayer ? l.color + "0D" : "#0D1117",
+                background: i === activeLayer ? l.color + "0C" : "transparent",
                 borderRadius: 8,
                 cursor: "pointer",
                 transition: "all 0.15s",
               }}
               onMouseEnter={(e) => {
                 if (i !== activeLayer) {
-                  e.currentTarget.style.background = "#ffffff05";
-                  e.currentTarget.style.borderLeftColor = l.color + "40";
+                  e.currentTarget.style.background = "#ffffff06";
+                  e.currentTarget.style.borderLeftColor = l.color + "35";
                 }
               }}
               onMouseLeave={(e) => {
                 if (i !== activeLayer) {
-                  e.currentTarget.style.background = "#0D1117";
+                  e.currentTarget.style.background = "transparent";
                   e.currentTarget.style.borderLeftColor = "transparent";
                 }
               }}
             >
-              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                <span style={{ fontSize: 18 }}>{l.icon}</span>
+              <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                <span style={{ fontSize: 18, lineHeight: 1 }}>{l.icon}</span>
                 <div>
                   <div
                     style={{
                       fontSize: 12,
                       fontWeight: 700,
                       color: i === activeLayer ? l.color : "#94A3B8",
+                      transition: "color 0.15s",
+                      marginBottom: 2,
                     }}
                   >
                     {l.label}
                   </div>
-                  <div style={{ fontSize: 10, color: "#475569", marginTop: 2 }}>
+                  <div
+                    style={{ fontSize: 10, color: "#334155", lineHeight: 1.4 }}
+                  >
                     {l.sub}
                   </div>
                 </div>
@@ -294,18 +327,9 @@ export default function CalculusSolverPage() {
             </button>
           ))}
 
-          {/* Full loss equation */}
-          <Card style={{ marginTop: 8, padding: "14px 16px" }}>
-            <div
-              style={{
-                fontSize: 10,
-                color: "#475569",
-                letterSpacing: "0.1em",
-                marginBottom: 8,
-              }}
-            >
-              COMBINED TRAINING LOSS
-            </div>
+          {/* Combined loss equation */}
+          <Card style={{ marginTop: 6, padding: "14px 16px" }}>
+            <EyebrowLabel color="#475569">Combined Training Loss</EyebrowLabel>
             <Code style={{ fontSize: 10.5 }}>{`Loss =
   decoder_ce   × 1.0   // main output
 + rule_head_ce × 1.0   // which rule?
@@ -314,24 +338,15 @@ export default function CalculusSolverPage() {
         </div>
 
         {/* Right: detail panel */}
-        <Card accent={layer.color + "40"}>
-          <div style={{ marginBottom: 14 }}>
+        <Card accent={layer.color + "35"}>
+          <div style={{ marginBottom: 16 }}>
+            <EyebrowLabel color={layer.color}>{layer.sub}</EyebrowLabel>
             <div
               style={{
-                fontSize: 11,
-                color: layer.color,
-                letterSpacing: "0.1em",
-                marginBottom: 4,
-              }}
-            >
-              {layer.sub}
-            </div>
-            <div
-              style={{
-                fontSize: 16,
+                fontSize: 17,
                 fontWeight: 700,
                 color: "#F1F5F9",
-                marginBottom: 6,
+                marginBottom: 10,
                 display: "flex",
                 gap: 10,
                 alignItems: "center",
@@ -344,37 +359,18 @@ export default function CalculusSolverPage() {
                 margin: 0,
                 fontSize: 12.5,
                 color: "#94A3B8",
-                lineHeight: 1.65,
+                lineHeight: 1.7,
               }}
             >
               {layer.desc}
             </p>
           </div>
-          <div style={{ marginBottom: 14 }}>
-            <div
-              style={{
-                fontSize: 10,
-                color: "#475569",
-                letterSpacing: "0.1em",
-                marginBottom: 8,
-              }}
-            >
-              KEY DETAILS
-            </div>
+          <div style={{ marginBottom: 16 }}>
+            <EyebrowLabel color="#334155">Key Details</EyebrowLabel>
             {layer.detail.map((d, i) => (
-              <div
-                key={i}
-                style={{
-                  display: "flex",
-                  gap: 8,
-                  padding: "6px 0",
-                  borderBottom: "1px solid #0F172A",
-                  fontSize: 12,
-                  color: "#94A3B8",
-                }}
-              >
-                <span style={{ color: layer.color, flexShrink: 0 }}>▸</span> {d}
-              </div>
+              <ListItem key={i} color={layer.color}>
+                {d}
+              </ListItem>
             ))}
           </div>
           <Code>{layer.code}</Code>
@@ -388,15 +384,8 @@ export default function CalculusSolverPage() {
         Training Pipeline
       </SectionTitle>
 
-      {/*
-        FIX: The original code had a broken JSX structure in this map.
-        The <span> arrow was placed INSIDE the map's <div> wrapper but
-        OUTSIDE the <button>, but the closing </div> tag was mismatched —
-        it appeared to close the outer <div style={{display:"flex"...}}>
-        prematurely. Fixed by using a React fragment and proper nesting.
-      */}
       <div
-        style={{ display: "flex", gap: 0, marginBottom: 16, overflowX: "auto" }}
+        style={{ display: "flex", gap: 0, marginBottom: 18, overflowX: "auto" }}
       >
         {TRAINING_STAGES.map((s, i) => (
           <div key={s.n} style={{ display: "flex", alignItems: "center" }}>
@@ -405,7 +394,7 @@ export default function CalculusSolverPage() {
               style={{
                 padding: "10px 18px",
                 border: "none",
-                background: i === activeStage ? s.color + "20" : "transparent",
+                background: i === activeStage ? s.color + "18" : "transparent",
                 borderBottom:
                   i === activeStage
                     ? `2px solid ${s.color}`
@@ -416,6 +405,7 @@ export default function CalculusSolverPage() {
                 whiteSpace: "nowrap",
                 transition: "all 0.15s",
                 fontFamily: "'IBM Plex Mono', monospace",
+                fontWeight: i === activeStage ? 700 : 400,
               }}
               onMouseEnter={(e) => {
                 if (i !== activeStage) e.currentTarget.style.color = "#94A3B8";
@@ -426,7 +416,6 @@ export default function CalculusSolverPage() {
             >
               Stage {s.n}: {s.label}
             </button>
-            {/* FIX: arrow only between items, not after the last one */}
             {i < TRAINING_STAGES.length - 1 && (
               <span
                 style={{ color: "#1E293B", fontSize: 16, padding: "0 2px" }}
@@ -438,25 +427,16 @@ export default function CalculusSolverPage() {
         ))}
       </div>
 
-      <Card accent={stage.color + "40"} style={{ marginBottom: 32 }}>
-        <Grid cols={2} gap={20}>
+      <Card accent={stage.color + "35"} style={{ marginBottom: 32 }}>
+        <Grid cols={2} gap={22}>
           <div>
-            <div
-              style={{
-                fontSize: 11,
-                color: stage.color,
-                letterSpacing: "0.1em",
-                marginBottom: 4,
-              }}
-            >
-              {stage.script}
-            </div>
+            <EyebrowLabel color={stage.color}>{stage.script}</EyebrowLabel>
             <div
               style={{
                 fontSize: 15,
                 fontWeight: 700,
                 color: "#F1F5F9",
-                marginBottom: 10,
+                marginBottom: 12,
               }}
             >
               Stage {stage.n}: {stage.label}
@@ -466,7 +446,7 @@ export default function CalculusSolverPage() {
                 margin: 0,
                 fontSize: 13,
                 color: "#94A3B8",
-                lineHeight: 1.65,
+                lineHeight: 1.7,
               }}
             >
               {stage.desc}
@@ -482,33 +462,48 @@ export default function CalculusSolverPage() {
       <SectionTitle sub="5M+ training pairs, all verified by slangmath before use.">
         Data Pipeline
       </SectionTitle>
-      <Grid cols={1} gap={10}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 8,
+          marginBottom: 32,
+        }}
+      >
         {DATA_SOURCES.map((d) => (
           <div
             key={d.name}
             style={{
               display: "flex",
-              gap: 16,
+              gap: 20,
               alignItems: "center",
-              background: "#0D1117",
+              background: "transparent",
               border: "1px solid #1E293B",
               borderLeft: `3px solid ${d.color}`,
               borderRadius: 8,
-              padding: "14px 18px",
-              transition: "background 0.15s",
+              padding: "14px 20px",
+              transition: "background 0.15s, border-color 0.15s",
+              cursor: "default",
             }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.background = "#ffffff04")
-            }
-            onMouseLeave={(e) => (e.currentTarget.style.background = "#0D1117")}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "#ffffff04";
+              e.currentTarget.style.borderColor = "#334155";
+              e.currentTarget.style.borderLeftColor = d.color;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.borderColor = "#1E293B";
+              e.currentTarget.style.borderLeftColor = d.color;
+            }}
           >
             <div
               style={{
-                minWidth: 110,
-                fontSize: 14,
-                fontWeight: 700,
+                minWidth: 120,
+                fontSize: 15,
+                fontWeight: 800,
                 color: d.color,
                 flexShrink: 0,
+                letterSpacing: "-0.01em",
               }}
             >
               {d.pairs}
@@ -517,18 +512,18 @@ export default function CalculusSolverPage() {
               <div
                 style={{
                   fontSize: 12,
-                  color: "#F1F5F9",
+                  color: "#E2E8F0",
                   fontWeight: 600,
                   marginBottom: 3,
                 }}
               >
                 {d.name}
               </div>
-              <div style={{ fontSize: 12, color: "#64748B" }}>{d.desc}</div>
+              <div style={{ fontSize: 11.5, color: "#475569" }}>{d.desc}</div>
             </div>
           </div>
         ))}
-      </Grid>
+      </div>
 
       <Divider />
 
@@ -536,18 +531,11 @@ export default function CalculusSolverPage() {
       <SectionTitle sub="Browser-ready JS class + FastAPI backend.">
         Inference Stack
       </SectionTitle>
-      <Grid cols={2} gap={16}>
+      <Grid cols={2} gap={16} style={{ marginBottom: 32 }}>
         <Card>
-          <div
-            style={{
-              fontSize: 11,
-              color: "#06B6D4",
-              letterSpacing: "0.1em",
-              marginBottom: 10,
-            }}
-          >
-            JS CLIENT (inference/CalculusSolver.js)
-          </div>
+          <EyebrowLabel color="#06B6D4">
+            JS Client — inference/CalculusSolver.js
+          </EyebrowLabel>
           <Code>{`const cs = new CalculusSolver({
   endpoint: "http://localhost:8000"
 });
@@ -563,16 +551,9 @@ const result = await cs.solve({
 // verified by slangmath post-decode`}</Code>
         </Card>
         <Card>
-          <div
-            style={{
-              fontSize: 11,
-              color: "#A855F7",
-              letterSpacing: "0.1em",
-              marginBottom: 10,
-            }}
-          >
-            FASTAPI BACKEND (api/app.py)
-          </div>
+          <EyebrowLabel color="#A855F7">
+            FastAPI Backend — api/app.py
+          </EyebrowLabel>
           <Code>{`# Start server
 uvicorn api.app:app \\
   --host 0.0.0.0 \\
@@ -617,17 +598,8 @@ uvicorn api.app:app \\
             note: "Gradient, Lagrange, surface integrals",
           },
         ].map((b) => (
-          <Card key={b.name} accent={b.color + "30"}>
-            <div
-              style={{
-                fontSize: 11,
-                color: b.color,
-                letterSpacing: "0.1em",
-                marginBottom: 6,
-              }}
-            >
-              {b.file}
-            </div>
+          <Card key={b.name} accent={b.color + "28"}>
+            <EyebrowLabel color={b.color}>{b.file}</EyebrowLabel>
             <div
               style={{
                 fontSize: 13,
@@ -638,7 +610,7 @@ uvicorn api.app:app \\
             >
               {b.name}
             </div>
-            <div style={{ fontSize: 12, color: "#64748B", marginBottom: 10 }}>
+            <div style={{ fontSize: 11.5, color: "#64748B", marginBottom: 12 }}>
               {b.note}
             </div>
             <Code style={{ fontSize: 10.5 }}>{`evaluateFraction(

@@ -34,6 +34,14 @@ function Shell() {
     setMenuOpen(false);
   }, [location.pathname]);
 
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
+
   return (
     <div
       style={{
@@ -48,9 +56,9 @@ function Shell() {
       {/* Top nav */}
       <nav
         style={{
-          background: "#0D1117",
-          borderBottom: "1px solid #1E293B",
-          padding: "0 32px",
+          background: "#0A0D16",
+          borderBottom: "1px solid #1A2535",
+          padding: "0 28px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -59,6 +67,7 @@ function Shell() {
           position: "sticky",
           top: 0,
           zIndex: 100,
+          backdropFilter: "blur(12px)",
         }}
       >
         {/* Brand */}
@@ -68,21 +77,24 @@ function Shell() {
             alignItems: "center",
             gap: 10,
             flexShrink: 0,
+            cursor: "pointer",
           }}
+          onClick={() => navigate("/overview")}
         >
           <div
             style={{
-              width: 28,
-              height: 28,
-              background: "linear-gradient(135deg,#6366F1,#06B6D4)",
-              borderRadius: 6,
+              width: 30,
+              height: 30,
+              background: "linear-gradient(135deg, #6366F1, #06B6D4)",
+              borderRadius: 7,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: 14,
+              fontSize: 15,
               color: "#fff",
               fontWeight: 700,
               flexShrink: 0,
+              boxShadow: "0 0 16px #6366F130",
             }}
           >
             ∫
@@ -98,13 +110,12 @@ function Shell() {
           >
             QUANTUM LOGICS
           </span>
-          <span style={{ color: "#334155", fontSize: 13 }}>/</span>
+          <span style={{ color: "#1E293B", fontSize: 13 }}>/</span>
           <span
             style={{
-              color: "#64748B",
+              color: "#475569",
               fontSize: 12,
               whiteSpace: "nowrap",
-              display: "none", // hidden on very small screens — see media workaround below
             }}
             className="nav-subtitle"
           >
@@ -150,7 +161,80 @@ function Shell() {
             </button>
           ))}
         </div>
+
+        {/* Mobile hamburger button */}
+        <button
+          className="mobile-menu-btn"
+          onClick={() => setMenuOpen((v) => !v)}
+          aria-label="Toggle navigation"
+          style={{
+            display: "none",
+            background: "transparent",
+            border: "1px solid #1E293B",
+            color: "#94A3B8",
+            cursor: "pointer",
+            borderRadius: 6,
+            padding: "7px 10px",
+            fontSize: 16,
+            lineHeight: 1,
+            gap: 4,
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            transition: "border-color 0.15s",
+          }}
+        >
+          {menuOpen ? "✕" : "☰"}
+        </button>
       </nav>
+
+      {/* Mobile drawer overlay */}
+      {menuOpen && (
+        <div
+          style={{
+            position: "fixed",
+            inset: "56px 0 0 0",
+            zIndex: 99,
+            background: "#080B14",
+            borderTop: "1px solid #1E293B",
+            display: "flex",
+            flexDirection: "column",
+            padding: "16px 0",
+          }}
+        >
+          {NAV.map((n) => (
+            <button
+              key={n.id}
+              onClick={() => navigate(n.path)}
+              style={{
+                textAlign: "left",
+                padding: "14px 28px",
+                border: "none",
+                borderLeft: `3px solid ${active === n.id ? "#6366F1" : "transparent"}`,
+                background: active === n.id ? "#6366F10C" : "transparent",
+                color: active === n.id ? "#F1F5F9" : "#64748B",
+                cursor: "pointer",
+                fontSize: 13,
+                fontFamily: "'IBM Plex Mono', monospace",
+                letterSpacing: "0.04em",
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                transition: "all 0.12s",
+              }}
+              onMouseEnter={(e) => {
+                if (active !== n.id) e.currentTarget.style.color = "#94A3B8";
+              }}
+              onMouseLeave={(e) => {
+                if (active !== n.id) e.currentTarget.style.color = "#64748B";
+              }}
+            >
+              <span style={{ fontSize: 16 }}>{n.icon}</span>
+              {n.label}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Page content */}
       <div style={{ flex: 1 }}>
@@ -158,15 +242,11 @@ function Shell() {
           {/*
             FIX: Use absolute paths in Navigate (leading "/") to prevent
             relative resolution from causing infinite redirect loops.
-            The catch-all was re-matching "/overview" and redirecting again
-            endlessly. Now it only fires for truly unknown paths.
           */}
           <Route index element={<Navigate to="/overview" replace />} />
-
           <Route path="/overview" element={<HowTheyFitPage />} />
           <Route path="/slang" element={<SLaNgPage />} />
           <Route path="/solver" element={<CalculusSolverPage />} />
-
           {/* Catch-all: only hits for paths that don't match any route above */}
           <Route path="*" element={<Navigate to="/overview" replace />} />
         </Routes>
@@ -175,18 +255,20 @@ function Shell() {
       {/* Footer */}
       <footer
         style={{
-          borderTop: "1px solid #1E293B",
-          padding: "16px 32px",
+          borderTop: "1px solid #111827",
+          padding: "16px 28px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           fontSize: 11,
-          color: "#334155",
+          color: "#1E293B",
           flexWrap: "wrap",
           gap: 8,
         }}
       >
-        <span>© 2025 QuantumLogics Incorporated. All rights reserved.</span>
+        <span style={{ color: "#334155" }}>
+          © 2025 QuantumLogics Incorporated. All rights reserved.
+        </span>
         <span style={{ color: "#1E293B" }}>
           CalculusSolver + SLaNg — Project Explorer
         </span>

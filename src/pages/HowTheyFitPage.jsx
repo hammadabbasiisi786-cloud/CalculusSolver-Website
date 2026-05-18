@@ -7,6 +7,7 @@ import {
   PageWrap,
   Divider,
   SectionTitle,
+  EyebrowLabel,
 } from "../components/ui.jsx";
 
 const FLOW_STEPS = [
@@ -106,32 +107,57 @@ export default function HowTheyFitPage() {
 
   return (
     <PageWrap>
-      <SectionTitle sub="Two sister projects from Quantum Logics — SLaNg is the math engine, CalculusSolver is the ML brain on top.">
-        How SLaNg &amp; CalculusSolver Work Together
-      </SectionTitle>
+      {/* Page header */}
+      <div style={{ marginBottom: 40 }}>
+        <EyebrowLabel color="#A855F7">OVERVIEW</EyebrowLabel>
+        <h1
+          style={{
+            margin: "8px 0 10px",
+            fontSize: 28,
+            fontWeight: 700,
+            color: "#F1F5F9",
+            letterSpacing: "-0.03em",
+            lineHeight: 1.2,
+          }}
+        >
+          How SLaNg &amp; CalculusSolver Work Together
+        </h1>
+        <p
+          style={{
+            margin: 0,
+            fontSize: 13.5,
+            color: "#64748B",
+            lineHeight: 1.7,
+            maxWidth: 580,
+          }}
+        >
+          Two sister projects from Quantum Logics — SLaNg is the math engine,
+          CalculusSolver is the ML brain on top.
+        </p>
+      </div>
 
       {/* Hero cards */}
-      <Grid cols={2} gap={16} style={{ marginBottom: 32 }}>
-        <Card accent="#A855F730">
-          <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-            <div style={{ fontSize: 28, lineHeight: 1, flexShrink: 0 }}>∂</div>
+      <Grid cols={2} gap={16} style={{ marginBottom: 36 }}>
+        <Card accent="#A855F728">
+          <div style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
+            <div
+              style={{
+                fontSize: 30,
+                lineHeight: 1,
+                flexShrink: 0,
+                marginTop: 2,
+              }}
+            >
+              ∂
+            </div>
             <div>
-              <div
-                style={{
-                  color: "#A855F7",
-                  fontSize: 11,
-                  letterSpacing: "0.1em",
-                  marginBottom: 4,
-                }}
-              >
-                LAYER 0 — FOUNDATION
-              </div>
+              <EyebrowLabel color="#A855F7">Layer 0 — Foundation</EyebrowLabel>
               <div
                 style={{
                   color: "#F1F5F9",
                   fontSize: 16,
                   fontWeight: 700,
-                  marginBottom: 8,
+                  marginBottom: 10,
                 }}
               >
                 SLaNg Math Library
@@ -141,7 +167,7 @@ export default function HowTheyFitPage() {
                   margin: 0,
                   fontSize: 12.5,
                   color: "#94A3B8",
-                  lineHeight: 1.65,
+                  lineHeight: 1.7,
                 }}
               >
                 A JavaScript library that represents every calculus expression
@@ -154,7 +180,7 @@ export default function HowTheyFitPage() {
                 style={{
                   display: "flex",
                   gap: 6,
-                  marginTop: 12,
+                  marginTop: 14,
                   flexWrap: "wrap",
                 }}
               >
@@ -174,26 +200,28 @@ export default function HowTheyFitPage() {
           </div>
         </Card>
 
-        <Card accent="#6366F130">
-          <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-            <div style={{ fontSize: 28, lineHeight: 1, flexShrink: 0 }}>⬡</div>
+        <Card accent="#6366F128">
+          <div style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
+            <div
+              style={{
+                fontSize: 30,
+                lineHeight: 1,
+                flexShrink: 0,
+                marginTop: 2,
+              }}
+            >
+              ⬡
+            </div>
             <div>
-              <div
-                style={{
-                  color: "#6366F1",
-                  fontSize: 11,
-                  letterSpacing: "0.1em",
-                  marginBottom: 4,
-                }}
-              >
-                LAYER 1 — INTELLIGENCE
-              </div>
+              <EyebrowLabel color="#6366F1">
+                Layer 1 — Intelligence
+              </EyebrowLabel>
               <div
                 style={{
                   color: "#F1F5F9",
                   fontSize: 16,
                   fontWeight: 700,
-                  marginBottom: 8,
+                  marginBottom: 10,
                 }}
               >
                 CalculusSolver ML System
@@ -203,7 +231,7 @@ export default function HowTheyFitPage() {
                   margin: 0,
                   fontSize: 12.5,
                   color: "#94A3B8",
-                  lineHeight: 1.65,
+                  lineHeight: 1.7,
                 }}
               >
                 A Python/JS machine learning system trained to solve calculus
@@ -216,7 +244,7 @@ export default function HowTheyFitPage() {
                 style={{
                   display: "flex",
                   gap: 6,
-                  marginTop: 12,
+                  marginTop: 14,
                   flexWrap: "wrap",
                 }}
               >
@@ -237,32 +265,25 @@ export default function HowTheyFitPage() {
         </Card>
       </Grid>
 
-      {/* The key principle */}
+      {/* Core design principle callout */}
       <div
         style={{
-          background: "linear-gradient(135deg, #6366F110, #06B6D408)",
-          border: "1px solid #6366F130",
+          background: "linear-gradient(135deg, #6366F10D, #06B6D406)",
+          border: "1px solid #6366F128",
+          borderLeft: "3px solid #6366F1",
           borderRadius: 10,
           padding: "20px 24px",
-          marginBottom: 32,
+          marginBottom: 36,
         }}
       >
-        <div
-          style={{
-            fontSize: 11,
-            color: "#6366F1",
-            letterSpacing: "0.1em",
-            marginBottom: 8,
-          }}
-        >
-          CORE DESIGN PRINCIPLE
-        </div>
+        <EyebrowLabel color="#6366F1">Core Design Principle</EyebrowLabel>
         <div
           style={{
             fontSize: 15,
             color: "#F1F5F9",
             fontWeight: 600,
             marginBottom: 8,
+            letterSpacing: "-0.01em",
           }}
         >
           "The model predicts what to do. SLaNg verifies whether it is correct."
@@ -272,7 +293,7 @@ export default function HowTheyFitPage() {
             margin: 0,
             fontSize: 13,
             color: "#94A3B8",
-            lineHeight: 1.65,
+            lineHeight: 1.7,
           }}
         >
           CalculusSolver contains zero calculus logic. It learns to predict
@@ -295,26 +316,33 @@ export default function HowTheyFitPage() {
 
       {/* Flow navigator */}
       <div
-        style={{ display: "flex", gap: 0, marginBottom: 20, overflowX: "auto" }}
+        style={{
+          display: "flex",
+          gap: 0,
+          marginBottom: 20,
+          overflowX: "auto",
+          paddingBottom: 1,
+        }}
       >
         {FLOW_STEPS.map((s, i) => (
           <div key={s.id} style={{ display: "flex", alignItems: "center" }}>
             <button
               onClick={() => setActive(i)}
               style={{
-                padding: "10px 16px",
+                padding: "10px 15px",
                 border: "none",
-                background: i === active ? s.color + "20" : "transparent",
+                background: i === active ? s.color + "18" : "transparent",
                 borderBottom:
                   i === active
                     ? `2px solid ${s.color}`
                     : "2px solid transparent",
                 color: i === active ? s.color : "#475569",
                 cursor: "pointer",
-                fontSize: 12,
+                fontSize: 11.5,
                 whiteSpace: "nowrap",
                 transition: "all 0.15s",
                 fontFamily: "'IBM Plex Mono', monospace",
+                fontWeight: i === active ? 700 : 400,
               }}
               onMouseEnter={(e) => {
                 if (i !== active) e.currentTarget.style.color = "#94A3B8";
@@ -328,7 +356,7 @@ export default function HowTheyFitPage() {
             </button>
             {i < FLOW_STEPS.length - 1 && (
               <span
-                style={{ color: "#1E293B", fontSize: 18, padding: "0 2px" }}
+                style={{ color: "#1E293B", fontSize: 16, padding: "0 1px" }}
               >
                 →
               </span>
@@ -337,23 +365,41 @@ export default function HowTheyFitPage() {
         ))}
       </div>
 
-      <Card accent={step.color + "40"} style={{ marginBottom: 32 }}>
-        <Grid cols={2} gap={20}>
+      {/* FIX: Grid is now properly inside the Card */}
+      <Card accent={step.color + "35"} style={{ marginBottom: 32 }}>
+        <Grid cols={2} gap={22}>
           <div>
             <div
               style={{
                 display: "flex",
                 gap: 10,
                 alignItems: "center",
-                marginBottom: 12,
+                marginBottom: 14,
               }}
             >
-              <span style={{ fontSize: 24 }}>{step.icon}</span>
+              <span
+                style={{
+                  fontSize: 28,
+                  lineHeight: 1,
+                  width: 44,
+                  height: 44,
+                  background: step.color + "15",
+                  border: `1px solid ${step.color}30`,
+                  borderRadius: 10,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+              >
+                {step.icon}
+              </span>
               <div>
+                <EyebrowLabel color={step.color}>Step {step.id}</EyebrowLabel>
                 <div
                   style={{ fontSize: 15, color: "#F1F5F9", fontWeight: 700 }}
                 >
-                  Step {step.id}: {step.label}
+                  {step.label}
                 </div>
               </div>
             </div>
@@ -362,7 +408,7 @@ export default function HowTheyFitPage() {
                 margin: 0,
                 fontSize: 13,
                 color: "#94A3B8",
-                lineHeight: 1.7,
+                lineHeight: 1.75,
               }}
             >
               {step.desc}
@@ -374,7 +420,7 @@ export default function HowTheyFitPage() {
 
       <Divider />
 
-      {/* Relationship summary table */}
+      {/* Responsibility table */}
       <SectionTitle sub="How the two repos divide responsibility.">
         Division of Responsibility
       </SectionTitle>
@@ -385,16 +431,19 @@ export default function HowTheyFitPage() {
           >
             <thead>
               <tr>
-                {["Concern", "SLaNg", "CalculusSolver"].map((h) => (
+                {["Concern", "SLaNg", "CalculusSolver"].map((h, hi) => (
                   <th
                     key={h}
                     style={{
                       textAlign: "left",
-                      padding: "8px 14px",
-                      color: "#475569",
+                      padding: "10px 16px",
+                      color:
+                        hi === 1 ? "#A855F7" : hi === 2 ? "#6366F1" : "#334155",
                       fontSize: 10,
                       letterSpacing: "0.1em",
                       borderBottom: "1px solid #1E293B",
+                      fontWeight: 700,
+                      textTransform: "uppercase",
                     }}
                   >
                     {h}
@@ -448,22 +497,43 @@ export default function HowTheyFitPage() {
                 <tr
                   key={i}
                   style={{
-                    background: i % 2 === 0 ? "transparent" : "#ffffff05",
+                    background: i % 2 === 0 ? "transparent" : "#ffffff04",
+                    transition: "background 0.1s",
                   }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.background = "#ffffff07")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.background =
+                      i % 2 === 0 ? "transparent" : "#ffffff04")
+                  }
                 >
                   <td
                     style={{
-                      padding: "10px 14px",
+                      padding: "11px 16px",
                       color: "#94A3B8",
                       fontWeight: 500,
+                      borderBottom: "1px solid #0D1624",
                     }}
                   >
                     {concern}
                   </td>
-                  <td style={{ padding: "10px 14px", color: "#A855F7" }}>
+                  <td
+                    style={{
+                      padding: "11px 16px",
+                      color: "#C084FC",
+                      borderBottom: "1px solid #0D1624",
+                    }}
+                  >
                     {slang}
                   </td>
-                  <td style={{ padding: "10px 14px", color: "#6366F1" }}>
+                  <td
+                    style={{
+                      padding: "11px 16px",
+                      color: "#818CF8",
+                      borderBottom: "1px solid #0D1624",
+                    }}
+                  >
                     {cs}
                   </td>
                 </tr>

@@ -17,3 +17,8 @@ node_modules/
 *.sublime-project
 *.sublime-workspace
 coverage/
+
+# make-folder-txt
+.txtconfig
+.txtignore
+website.txt

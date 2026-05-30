@@ -232,6 +232,82 @@ const DATA_SOURCES = [
   },
 ];
 
+const CONTRIBUTOR_CONCEPTS = [
+  {
+    title: "SLaNg Expression Trees",
+    color: "#22D3EE",
+    body: "Inputs and outputs are JSON trees, not LaTeX strings. Learn terms, fractions, variables, operation envelopes, and how slangmath evaluates an expression.",
+  },
+  {
+    title: "Tokenizer + Vocabulary",
+    color: "#7C6FFF",
+    body: "The model sees token IDs from tokenizer/vocab.json. New operations must be added to the vocabulary and serialized consistently.",
+  },
+  {
+    title: "Training Pairs",
+    color: "#10B981",
+    body: "Every sample is input tree, solved output tree, rule labels, and optional step trace. Bad or unverifiable samples should be rejected before training.",
+  },
+  {
+    title: "Checkpoint Flow",
+    color: "#F59E0B",
+    body: "Stage 1 writes checkpoints/pretrain/best.pt, Stage 2 writes checkpoints/sft/best.pt, Stage 3 writes checkpoints/final/best.pt for deployment.",
+  },
+  {
+    title: "Verifier-First Accuracy",
+    color: "#C084FC",
+    body: "Accuracy is numerical equivalence over random points with evaluateFraction, plus step-rule accuracy for the reasoning trace.",
+  },
+  {
+    title: "FastAPI + Streamlit",
+    color: "#EF4444",
+    body: "FastAPI serves /solve for programmatic clients. Streamlit loads the same checkpoint and shows a UI; if no checkpoint exists it falls back to basic polynomial calculus.",
+  },
+];
+
+const GPU_COMMANDS = `# 1. Create environment
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+npm install
+
+# 2. Generate or refresh SLaNg training data
+node data_pipeline/generate_slang_data.js --count 50000 --out data/slang_dataset.jsonl
+node data_pipeline/split_data.js
+
+# 3. Stage 1: grammar pretraining
+python training/pretrain.py \\
+  --config training/config/pretrain.yaml \\
+  --data data/splits/train \\
+  --output checkpoints/pretrain
+
+# 4. Stage 2: supervised fine-tuning
+python training/finetune.py \\
+  --checkpoint checkpoints/pretrain/best.pt \\
+  --config training/config/finetune.yaml \\
+  --data data/splits/train \\
+  --output checkpoints/sft
+
+# 5. Stage 3: verifier-loop hard examples
+python training/verifier_loop.py \\
+  --checkpoint checkpoints/sft/best.pt \\
+  --hard_example_ratio 0.4 \\
+  --output checkpoints/final`;
+
+const ACCURACY_COMMANDS = `# Numerical equivalence on benchmark answers
+node eval/slang_equivalence.js \\
+  --checkpoint checkpoints/final/best.pt \\
+  --benchmark eval/benchmarks/ap_calculus.json \\
+  --points 50
+
+# Step trace / rule-label accuracy
+node eval/step_accuracy.js \\
+  --checkpoint checkpoints/final/best.pt \\
+  --benchmark eval/benchmarks/ap_calculus.json
+
+# Fast smoke test of the deployed API
+uvicorn api.app:app --host 0.0.0.0 --port 8000 --workers 1`;
+
 export default function CalculusSolverPage() {
   const [activeLayer, setActiveLayer] = useState(0);
   const [activeStage, setActiveStage] = useState(0);
@@ -631,6 +707,151 @@ uvicorn api.app:app \\
 # - verifier.js checks final answer`}</Code>
         </Card>
       </Grid>
+
+      <Divider />
+
+      {/* ── Contributor guide ─────────────────────────────────────────── */}
+      <SectionTitle sub="The concepts a new contributor should understand before changing data, model code, or training scripts.">
+        Contributor Starting Map
+      </SectionTitle>
+
+      <Grid cols={3} gap={12} style={{ marginBottom: 40 }}>
+        {CONTRIBUTOR_CONCEPTS.map((item) => (
+          <Card key={item.title} accent={item.color + "28"} glow>
+            <EyebrowLabel color={item.color}>Required Concept</EyebrowLabel>
+            <div
+              style={{
+                fontSize: 13,
+                fontWeight: 700,
+                color: "#EFF3FF",
+                marginBottom: 8,
+                fontFamily: "var(--font-sans)",
+              }}
+            >
+              {item.title}
+            </div>
+            <p
+              style={{
+                margin: 0,
+                fontSize: 12,
+                color: "#8B97B8",
+                lineHeight: 1.7,
+              }}
+            >
+              {item.body}
+            </p>
+          </Card>
+        ))}
+      </Grid>
+
+      <Grid cols={2} gap={16} style={{ marginBottom: 40 }}>
+        <Card glow accent="#10B98128">
+          <EyebrowLabel color="#10B981">How To Contribute</EyebrowLabel>
+          <ListItem color="#10B981">
+            Add or fix SLaNg math functions first, then generate verified
+            training pairs from those functions.
+          </ListItem>
+          <ListItem color="#10B981">
+            Add new operation tokens, rule labels, and serializer support before
+            expecting the model to learn a new operation.
+          </ListItem>
+          <ListItem color="#10B981">
+            Keep training data auditable: each sample should include the input
+            envelope, expected output tree, operation, rule target, and step
+            targets when available.
+          </ListItem>
+          <ListItem color="#10B981">
+            Run numerical equivalence and step accuracy before promoting a
+            checkpoint to checkpoints/final/best.pt.
+          </ListItem>
+        </Card>
+        <Card glow accent="#F59E0B28">
+          <EyebrowLabel color="#F59E0B">GPU Training Checklist</EyebrowLabel>
+          <ListItem color="#F59E0B">
+            Use an NVIDIA GPU with CUDA PyTorch installed; start with 12GB VRAM
+            for small experiments and 24GB+ for larger batches.
+          </ListItem>
+          <ListItem color="#F59E0B">
+            Tune batch size, gradient accumulation, fp16, and max sequence
+            length before changing model architecture.
+          </ListItem>
+          <ListItem color="#F59E0B">
+            Save every stage under checkpoints/ so Streamlit and FastAPI can
+            discover the newest compatible best.pt automatically.
+          </ListItem>
+          <ListItem color="#F59E0B">
+            Upload checkpoints/final/best.pt with the app deployment; otherwise
+            Streamlit stays in fallback mode.
+          </ListItem>
+        </Card>
+      </Grid>
+
+      <Divider />
+
+      {/* ── Practical training + deployment ───────────────────────────── */}
+      <SectionTitle sub="End-to-end commands for a contributor training on GPU and then deploying the resulting checkpoint.">
+        Train, Deploy, And Test
+      </SectionTitle>
+
+      <Grid cols={2} gap={16} style={{ marginBottom: 40 }}>
+        <Card glow accent="#7C6FFF28">
+          <EyebrowLabel color="#7C6FFF">GPU Training Commands</EyebrowLabel>
+          <Code>{GPU_COMMANDS}</Code>
+        </Card>
+        <Card glow accent="#22D3EE28">
+          <EyebrowLabel color="#22D3EE">Streamlit Deployment Flow</EyebrowLabel>
+          <Code>{`# Streamlit Cloud main file
+streamlit_app.py
+
+# Required deployed artifact
+checkpoints/final/best.pt
+
+# Runtime behavior
+# - If final/best.pt exists: load neural model
+# - If missing: show fallback polynomial solver
+# - /solve API uses the same checkpoint search order
+
+# Checkpoint lookup order
+MODEL_PATH
+checkpoints/final/best.pt
+checkpoints/sft/best.pt
+checkpoints/pretrain/best.pt`}</Code>
+        </Card>
+      </Grid>
+
+      <Card glow accent="#C084FC28" style={{ marginBottom: 40 }}>
+        <Grid cols={2} gap={24}>
+          <div>
+            <EyebrowLabel color="#C084FC">Accuracy Testing</EyebrowLabel>
+            <p
+              style={{
+                margin: "0 0 14px",
+                fontSize: 13,
+                color: "#8B97B8",
+                lineHeight: 1.75,
+              }}
+            >
+              A checkpoint is promoted only after it passes numerical
+              equivalence and step trace checks. Numerical equivalence compares
+              the model output to slangmath over random points; step accuracy
+              checks whether each generated rule label matches ground truth.
+            </p>
+            <ListItem color="#C084FC">
+              Overall equivalence rate: solved problems divided by attempted
+              problems.
+            </ListItem>
+            <ListItem color="#C084FC">
+              Per-operation rate: diff, integrate, limit, gradient, hessian,
+              lagrange, tangent_plane, and dir_deriv reported separately.
+            </ListItem>
+            <ListItem color="#C084FC">
+              Per-rule accuracy: power_rule, chain_rule, product_rule,
+              quotient_rule, and operation-specific rules.
+            </ListItem>
+          </div>
+          <Code>{ACCURACY_COMMANDS}</Code>
+        </Grid>
+      </Card>
 
       <Divider />
 

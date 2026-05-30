@@ -261,7 +261,7 @@ const CONTRIBUTOR_CONCEPTS = [
   {
     title: "FastAPI + Streamlit",
     color: "#EF4444",
-    body: "FastAPI serves /solve for programmatic clients. Streamlit loads the same checkpoint and shows a UI; if no checkpoint exists it falls back to basic polynomial calculus.",
+    body: "FastAPI serves /solve for programmatic clients. Streamlit loads the same checkpoint via streamlit_app.py and shows a web UI. If no checkpoint exists it falls back to the built-in polynomial solver until a trained model is deployed.",
   },
 ];
 
@@ -294,16 +294,11 @@ python training/verifier_loop.py \\
   --hard_example_ratio 0.4 \\
   --output checkpoints/final`;
 
-const ACCURACY_COMMANDS = `# Numerical equivalence on benchmark answers
-node eval/slang_equivalence.js \\
-  --checkpoint checkpoints/final/best.pt \\
-  --benchmark eval/benchmarks/ap_calculus.json \\
-  --points 50
+const ACCURACY_COMMANDS = `# Run the local evaluation script against the installed dataset
+python eval/evaluate_model.py --num_samples 100
 
-# Step trace / rule-label accuracy
-node eval/step_accuracy.js \\
-  --checkpoint checkpoints/final/best.pt \\
-  --benchmark eval/benchmarks/ap_calculus.json
+# Start Streamlit for manual model testing
+streamlit run streamlit_app.py
 
 # Fast smoke test of the deployed API
 uvicorn api.app:app --host 0.0.0.0 --port 8000 --workers 1`;
@@ -811,6 +806,9 @@ checkpoints/final/best.pt
 # - If missing: show fallback polynomial solver
 # - /solve API uses the same checkpoint search order
 
+# Run locally
+streamlit run streamlit_app.py
+
 # Checkpoint lookup order
 MODEL_PATH
 checkpoints/final/best.pt
@@ -841,12 +839,20 @@ checkpoints/pretrain/best.pt`}</Code>
               problems.
             </ListItem>
             <ListItem color="#C084FC">
+              Model accuracy is validated numerically by comparing output to
+              slangmath over random points in each sample.
+            </ListItem>
+            <ListItem color="#C084FC">
               Per-operation rate: diff, integrate, limit, gradient, hessian,
               lagrange, tangent_plane, and dir_deriv reported separately.
             </ListItem>
             <ListItem color="#C084FC">
               Per-rule accuracy: power_rule, chain_rule, product_rule,
               quotient_rule, and operation-specific rules.
+            </ListItem>
+            <ListItem color="#C084FC">
+              Streamlit shows the same checkpoint used by FastAPI, so local UI
+              testing reflects deployed behavior.
             </ListItem>
           </div>
           <Code>{ACCURACY_COMMANDS}</Code>

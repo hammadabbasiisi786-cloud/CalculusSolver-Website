@@ -10,6 +10,7 @@ import {
 import SLaNgPage from "./pages/SLaNgPage.jsx";
 import CalculusSolverPage from "./pages/CalculusSolverPage.jsx";
 import HowTheyFitPage from "./pages/HowTheyFitPage.jsx";
+import SolverPage from "./pages/SolverPage.jsx";
 import ContributePage from "./pages/ContributePage.jsx";
 
 const NAV = [
@@ -41,6 +42,13 @@ const NAV = [
     icon: "⊕",
     accent: "#10B981",
   },
+  {
+    id: "try-it",
+    path: "/try-it",
+    label: "Try It",
+    icon: "▶",
+    accent: "#F59E0B"
+  }
 ];
 
 function Shell() {
@@ -300,6 +308,7 @@ function Shell() {
           <Route path="/overview" element={<HowTheyFitPage />} />
           <Route path="/slang" element={<SLaNgPage />} />
           <Route path="/solver" element={<CalculusSolverPage />} />
+          <Route path="/try-it" element={<SolverPage />} />
           <Route path="/contribute" element={<ContributePage />} />
           <Route path="*" element={<Navigate to="/overview" replace />} />
         </Routes>

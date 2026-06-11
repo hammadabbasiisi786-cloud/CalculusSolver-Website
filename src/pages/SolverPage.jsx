@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { PageWrap, SectionTitle, Card, Tag, Divider } from "../components/ui.jsx";
 import { solve as apiSolve, checkHealth } from "../api/calculusSolverClient.js";
+import SlangTreeView from "../components/SlangTreeView.jsx";
 
 const MOCK = {
     status: "solved", rule: "quotient_rule", confidence: 0.96, verified: true,
@@ -173,6 +174,16 @@ export default function SolverPage() {
                                 </div>
                             ))}
                         </>
+                    )}
+                    {result.expr?.numi && (
+                        <div style={{ marginTop: 20 }}>
+                            <div style={{ fontSize: 10, color: "#475569",
+                                        textTransform: "uppercase",
+                                        letterSpacing: "0.07em", marginBottom: 10 }}>
+                                Output expression (SLaNg tree)
+                            </div>
+                            <SlangTreeView expr={result.expr} label="Output" />
+                        </div>
                     )}
                     {result.status === "unverified" && (
                         <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 8, background: "#422006", border: "1px solid #78350f", color: "#fbbf24", fontSize: 12 }}>

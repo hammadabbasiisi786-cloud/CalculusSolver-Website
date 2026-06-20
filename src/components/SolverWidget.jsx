@@ -30,20 +30,6 @@ const EXAMPLES = [
     op: "diff",
     variable: "x",
     expr: { numi: { terms: [{ coeff: 1, var: { x: 2 } }] }, deno: 1 },
-    mockResult: {
-      status: "solved",
-      verified: true,
-      rule: "power_rule",
-      confidence: 0.98,
-      latex: "2x",
-      expr: { numi: { terms: [{ coeff: 2, var: { x: 1 } }] }, deno: 1 },
-      steps: [
-        {
-          rule: "power_rule",
-          description: "Apply power rule: d/dx[x^n] = n·x^(n−1), so d/dx[x²] = 2x",
-        },
-      ],
-    },
   },
   {
     id: "ex2",
@@ -60,27 +46,6 @@ const EXAMPLES = [
       },
       deno: 1,
     },
-    mockResult: {
-      status: "solved",
-      verified: true,
-      rule: "sum_rule",
-      confidence: 0.97,
-      latex: "9x^{2} + 2",
-      expr: {
-        numi: {
-          terms: [
-            { coeff: 9, var: { x: 2 } },
-            { coeff: 2 },
-          ],
-        },
-        deno: 1,
-      },
-      steps: [
-        { rule: "sum_rule", description: "Apply sum rule: differentiate each term separately" },
-        { rule: "power_rule", description: "d/dx[3x³] = 3·3·x² = 9x²" },
-        { rule: "power_rule", description: "d/dx[2x] = 2" },
-      ],
-    },
   },
   {
     id: "ex3",
@@ -89,24 +54,6 @@ const EXAMPLES = [
     op: "integrate",
     variable: "x",
     expr: { numi: { terms: [{ coeff: 6, var: { x: 1 } }] }, deno: 1 },
-    mockResult: {
-      status: "solved",
-      verified: true,
-      rule: "power_rule_integral",
-      confidence: 0.96,
-      latex: "3x^{2} + C",
-      expr: { numi: { terms: [{ coeff: 3, var: { x: 2 } }] }, deno: 1 },
-      steps: [
-        {
-          rule: "power_rule_integral",
-          description: "Apply reverse power rule: ∫x^n dx = x^(n+1)/(n+1)",
-        },
-        {
-          rule: "power_rule_integral",
-          description: "∫6x dx = 6·x²/2 = 3x² + C",
-        },
-      ],
-    },
   },
   {
     id: "ex4",
@@ -124,28 +71,6 @@ const EXAMPLES = [
       },
       deno: 1,
     },
-    mockResult: {
-      status: "solved",
-      verified: true,
-      rule: "sum_rule",
-      confidence: 0.97,
-      latex: "20x^{3} - 6x",
-      expr: {
-        numi: {
-          terms: [
-            { coeff: 20, var: { x: 3 } },
-            { coeff: -6, var: { x: 1 } },
-          ],
-        },
-        deno: 1,
-      },
-      steps: [
-        { rule: "sum_rule", description: "Apply sum rule: differentiate each term separately" },
-        { rule: "power_rule", description: "d/dx[5x⁴] = 5·4·x³ = 20x³" },
-        { rule: "power_rule", description: "d/dx[−3x²] = −3·2·x = −6x" },
-        { rule: "constant_rule", description: "d/dx[7] = 0 (constant term vanishes)" },
-      ],
-    },
   },
   {
     id: "ex5",
@@ -161,27 +86,6 @@ const EXAMPLES = [
         ],
       },
       deno: 1,
-    },
-    mockResult: {
-      status: "solved",
-      verified: true,
-      rule: "sum_rule",
-      confidence: 0.95,
-      latex: "\\frac{x^{4}}{4} + x^{2} + C",
-      expr: {
-        numi: {
-          terms: [
-            { coeff: 0.25, var: { x: 4 } },
-            { coeff: 1, var: { x: 2 } },
-          ],
-        },
-        deno: 1,
-      },
-      steps: [
-        { rule: "sum_rule", description: "Apply sum rule: integrate each term separately" },
-        { rule: "power_rule_integral", description: "∫x³ dx = x⁴/4" },
-        { rule: "power_rule_integral", description: "∫2x dx = 2·x²/2 = x²" },
-      ],
     },
   },
 ];

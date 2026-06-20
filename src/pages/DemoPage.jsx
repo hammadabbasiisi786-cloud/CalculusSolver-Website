@@ -150,8 +150,8 @@ export default function DemoPage() {
             width: 28,
             height: 28,
             borderRadius: 8,
-            background: "#F59E0B14",
-            border: "1px solid #F59E0B28",
+            background: "#10B98114",
+            border: "1px solid #10B98128",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -159,19 +159,19 @@ export default function DemoPage() {
             flexShrink: 0,
           }}
         >
-          💡
+          ✅
         </span>
         <div>
           <div
             style={{
               fontSize: 12,
               fontWeight: 600,
-              color: "#F59E0B",
+              color: "#10B981",
               marginBottom: 4,
               fontFamily: "var(--font-sans)",
             }}
           >
-            Demo Mode
+            Backend Connected
           </div>
           <div
             style={{
@@ -181,10 +181,11 @@ export default function DemoPage() {
               fontFamily: "var(--font-sans)",
             }}
           >
-            The solver is currently running in demo mode with preloaded mock
-            results. Once the FastAPI backend is connected (Sub-Task D3) and
-            the neural model is deployed (Member C), this widget will solve
-            expressions in real-time with full SLaNg verification.
+            The solver widget is connected to the FastAPI backend at the
+            configured API endpoint. Load a preloaded example or enter your own
+            SLaNg expression, then hit Solve. Once the neural model is fully
+            deployed (Member C), the solver will return ML-powered results with
+            full SLaNg verification.
           </div>
         </div>
       </div>

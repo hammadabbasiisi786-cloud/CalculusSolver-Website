@@ -1,12 +1,13 @@
 /* ─────────────────────────────────────────────────────────────────────────────
    router.jsx — Centralised route + navigation configuration
-   4 routes: /  /slang  /model  /demo
+   5 routes: /  /slang  /model  /demo  /contribute
    ───────────────────────────────────────────────────────────────────────────── */
 
 import HowTheyFitPage from "./pages/HowTheyFitPage.jsx";
 import SLaNgPage from "./pages/SLaNgPage.jsx";
 import CalculusSolverPage from "./pages/CalculusSolverPage.jsx";
 import DemoPage from "./pages/DemoPage.jsx";
+import ContributePage from "./pages/ContributePage.jsx";
 
 // Navigation items rendered in the top bar and mobile drawer.
 // Each entry maps 1-to-1 with a route below.
@@ -39,6 +40,13 @@ export const NAV = [
     icon: "▶",
     accent: "#F59E0B",
   },
+  {
+    id: "contribute",
+    path: "/contribute",
+    label: "Contribute",
+    icon: "✦",
+    accent: "#10B981",
+  },
 ];
 
 // Route definitions consumed by <Routes> in App.jsx.
@@ -48,4 +56,5 @@ export const ROUTES = [
   { path: "/slang", Component: SLaNgPage },
   { path: "/model", Component: CalculusSolverPage },
   { path: "/demo", Component: DemoPage },
+  { path: "/contribute", Component: ContributePage },
 ];

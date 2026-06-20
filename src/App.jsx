@@ -7,49 +7,7 @@ import {
   useNavigate,
   useLocation,
 } from "react-router-dom";
-import SLaNgPage from "./pages/SLaNgPage.jsx";
-import CalculusSolverPage from "./pages/CalculusSolverPage.jsx";
-import HowTheyFitPage from "./pages/HowTheyFitPage.jsx";
-import SolverPage from "./pages/SolverPage.jsx";
-import ContributePage from "./pages/ContributePage.jsx";
-
-const NAV = [
-  {
-    id: "overview",
-    path: "/overview",
-    label: "Overview",
-    icon: "◈",
-    accent: "#7C6FFF",
-  },
-  {
-    id: "slang",
-    path: "/slang",
-    label: "SLaNg Library",
-    icon: "∂",
-    accent: "#C084FC",
-  },
-  {
-    id: "solver",
-    path: "/solver",
-    label: "CalculusSolver ML",
-    icon: "⬡",
-    accent: "#22D3EE",
-  },
-  {
-    id: "contribute",
-    path: "/contribute",
-    label: "Train & Contribute",
-    icon: "⊕",
-    accent: "#10B981",
-  },
-  {
-    id: "try-it",
-    path: "/try-it",
-    label: "Try It",
-    icon: "▶",
-    accent: "#F59E0B"
-  }
-];
+import { NAV, ROUTES } from "./router.jsx";
 
 function Shell() {
   const navigate = useNavigate();
@@ -57,11 +15,13 @@ function Shell() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  // For "/", match only exact; for others, match prefix too.
   const active =
-    NAV.find(
-      (n) =>
-        location.pathname === n.path ||
-        location.pathname.startsWith(n.path + "/"),
+    NAV.find((n) =>
+      n.path === "/"
+        ? location.pathname === "/"
+        : location.pathname === n.path ||
+          location.pathname.startsWith(n.path + "/"),
     )?.id ?? "overview";
 
   const activeNav = NAV.find((n) => n.id === active);
@@ -120,7 +80,7 @@ function Shell() {
             flexShrink: 0,
             cursor: "pointer",
           }}
-          onClick={() => navigate("/overview")}
+          onClick={() => navigate("/")}
         >
           {/* Logo mark */}
           <div
@@ -304,13 +264,10 @@ function Shell() {
       {/* Page content */}
       <div style={{ flex: 1 }}>
         <Routes>
-          <Route index element={<Navigate to="/overview" replace />} />
-          <Route path="/overview" element={<HowTheyFitPage />} />
-          <Route path="/slang" element={<SLaNgPage />} />
-          <Route path="/solver" element={<CalculusSolverPage />} />
-          <Route path="/try-it" element={<SolverPage />} />
-          <Route path="/contribute" element={<ContributePage />} />
-          <Route path="*" element={<Navigate to="/overview" replace />} />
+          {ROUTES.map((r) => (
+            <Route key={r.path} path={r.path} element={<r.Component />} />
+          ))}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
 

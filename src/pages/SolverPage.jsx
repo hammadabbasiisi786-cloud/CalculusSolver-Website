@@ -5,7 +5,7 @@ import { solve as apiSolve, checkHealth } from "../api/calculusSolverClient.js";
 import SlangTreeView from "../components/SlangTreeView.jsx";
 
 // Import SLaNg mathematical engine for local parsing and formatting
-import { latexToSlang, slangToLatex } from "slangmath/src/convertor.js";
+import { latexToSlang, slangToLatex } from "../slang/convertor.js";
 
 const MOCK = {
     status: "solved", rule: "mock_rule", confidence: 0.99, verified: true,

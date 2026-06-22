@@ -5,9 +5,10 @@ node_modules/
 /dist/
 .DS_Store
 *.log
-*.env
-*.local
+.env
 .env.local
+*.local
+!.env.production
 *.cache
 *.tmp
 *.bak

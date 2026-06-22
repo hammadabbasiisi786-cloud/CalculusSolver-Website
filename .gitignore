@@ -9,6 +9,8 @@ node_modules/
 .env.local
 *.local
 !.env.production
+*.env
+*.local
 *.cache
 *.tmp
 *.bak

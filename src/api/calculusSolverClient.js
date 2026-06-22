@@ -1,6 +1,6 @@
 const API_BASE = import.meta.env.VITE_API_URL || "https://api.calculussolver.quantumlogicslimited.com";
 
-export async function solve(text, opType, variable) {
+export async function solve(expr, opType = "diff", variable = "x") {
     let res;
     try {
         res = await fetch(`${API_BASE}/solve`, {
@@ -9,7 +9,7 @@ export async function solve(text, opType, variable) {
             body: JSON.stringify({
                 op: opType,
                 var: variable,
-                text_input: text.trim(),
+                expr: expr,
             }),
         });
     } 
